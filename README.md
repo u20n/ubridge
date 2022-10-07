@@ -10,7 +10,8 @@ Support for:
 
 Configuration
 ----
-Check `config.def.json`
+Check `config.def.json` for an example
+ubridge uses a config located [at] `config.json`
 
 Usage
 ----
