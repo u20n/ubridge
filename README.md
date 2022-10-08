@@ -1,12 +1,8 @@
 # u(micro)bridge
 
-An incredibly minimal irc <--> Disord bridge written in std python.
+An incredibly minimal IRC <--> Disord bridge written in std python.
 
-Support for:
-  - Mentions [/]
-    - Replies [/] 
-  - Edits [ ]
-  - Nicknames [ ]
+Channels are 1:1, Bridge(s) and Server(s) are 1:1
 
 Configuration
 ----

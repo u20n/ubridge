@@ -4,6 +4,6 @@
   "token": "abcd.efg.hijk", 
   "channels": 
   {
-    "test": "123456789"
+    "#test": "123456789"
   }
 }

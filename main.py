@@ -17,26 +17,23 @@ class irc_: # channel
         user = marray[0].split('!')[0][1:]
         m = " ".join(marray[3:])[1:-2] # remove the leading ':' and trailing '\r\n'
         if m != self.__last_m:
-            self.__last_m = m # so we don't have a bunch of parrots
-            # [TODO] IRC -> Discord mentions
+            self.__last_m = m # so we don't have a bunch of parrots 
             self.bridge.push(self.channel, user, m)
 
     def __listen(self, user, socket):
         while True:
             buff = socket.recv(1024)
             m = str(buff, "utf-8").split(' ')
-            # ignore bridged messages 
             if m[0].split("!")[-1].split("_")[-1].split("@")[0] == "ubridge":
-                print("ignoring echo")
+                # ignore bridged messages
                 continue
             if m[0] == "PING":
                 print("ping/pong") 
                 self.__send(socket, "PONG %s\n" %(m[1]))
                 continue
-            if m[1] == "PRIVMSG" and m[2] == self.channel: 
+            if len(m) > 2 and m[1] == "PRIVMSG" and m[2] == self.channel: 
                 self.__parse_m(m) 
                 continue
-            print(m) # DEBUG
    
     def add_user(self, name, nick):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
@@ -55,7 +52,7 @@ class irc_: # channel
         # make sure it's a plaintext message
         assert(int(msg["type"] == 0))  
         if name not in self.users:
-            self.add_user(name, name) #[TODO] getting nicks are painful
+            self.add_user(name, name) #[TODO] getting nicks is painful
         
         self.__send(self.users[name], ("PRIVMSG %s :%s\n" % (self.channel, self.__form_m(msg))))
         time.sleep(0.2)
@@ -105,25 +102,23 @@ class discord_: # channel
             existing_w = json.loads(str(r.content, "utf-8"))
             assert(r.status_code == 200)
             
-            existing_e = False
+            found_w = False
             for w in existing_w:
-                if w["user"]["id"] == self.__bot_id:
-                    if w["name"] == name:
-                        existing_e = True
-                        self.w_map[name] = self.__form_w_url(w)
-                    # might as well garbage collect here too
-                    if w["name"] not in self.w_map:
-                        r = requests.delete(self.__form_w_url(w))
+                if w["name"] == name:
+                    found_w = True
+                    self.w_map[name] = self.__form_w_url(w)
+                if w["name"] not in self.w_map: # garbage collect [!] (this will wipe other bot's webhooks)
+                    r = requests.delete(self.__form_w_url(w))
 
 
-            if not existing_e: # if none for this user, make one
+            if not found_w: # if none for this user, make one
                 r = requests.post(
                     "https://discord.com/api/channels/%s/webhooks"%(self.channel_id),
                     headers={
                         "Authorization": "Bot %s"%(self.token),
                         "Content-Type": "application/json"
                     },
-                    data=json.dumps({"name": name}) # TODO, take something real
+                    data=json.dumps({"name": name})
                 ) 
                 rjson = json.loads(str(r.content, "utf-8"))
                 self.w_map[name] = self.__form_w_url(rjson)
@@ -136,8 +131,7 @@ class discord_: # channel
     def __init__(self, token, channel_id, bridge):
         self.token = token
         self.channel_id = channel_id
-        self.bridge = bridge
-        self.__bot_id = "1026668788835418144" # CONFIG
+        self.bridge = bridge 
         t = threading.Thread(target=self.__listen)
         t.start()
 
