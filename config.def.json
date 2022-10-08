@@ -1,8 +1,7 @@
 {
   "server": "127.0.0.1",
   "port": "6679",
-  "token": "abcd.efg.hijk",
-  "refresh": 2,
+  "token": "abcd.efg.hijk", 
   "channels": 
   {
     "test": "123456789"
