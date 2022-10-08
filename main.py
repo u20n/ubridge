@@ -41,10 +41,10 @@ class irc_: # channel
     def add_user(self, name, nick):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         s.connect((self.ip, self.port))
-        self.__send(s, ("user %s_ubridge ubridge ubridge %s_ubridge\n" % (name, name)))
-        self.__send(s, ("nick %s\n" % nick))
+        self.__send(s, ("USER %s_ubridge ubridge ubridge %s_ubridge\n" % (name, name)))
+        self.__send(s, ("NICK %s\n" % nick))
         time.sleep(0.2)
-        self.__send(s, ("join %s\n" % self.channel)) 
+        self.__send(s, ("JOIN %s\n" % self.channel)) 
         self.users[name] = s
         # start listening
         t = threading.Thread(target=self.__listen, args=(name, s))
