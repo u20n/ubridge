@@ -1,8 +1,8 @@
-# u(micro)bridge
+# u(micro)Bridge
 
-An incredibly minimal IRC <--> Disord bridge written in std python.
+An incredibly minimal IRC <--> Disord bridge written in std python. Dogfood.
 
-Channels are 1:1, Bridge(s) and Server(s) are 1:1
+Channels are 1:1, Bridge(s) and Server(s) are 1:1.
 
 Configuration
 ----
