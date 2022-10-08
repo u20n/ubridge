@@ -144,7 +144,7 @@ class bridge_: # 1:1 bridge:server
     c_map = {}
     def last(self, channel_id, new_id=None): # returns and takes an id
         j = json.load(open("last.log.json"))
-        if new_id:
+        if new_id or channel_id not in j:
             j[channel_id] = new_id
 
         with open("last.log.json", 'w') as o:
