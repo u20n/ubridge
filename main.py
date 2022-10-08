@@ -31,7 +31,7 @@ class irc_: # channel
                 continue
             if m[0] == "PING":
                 print("ping/pong") 
-                self.__send(socket, "pong %s\n" %(m[1]))
+                self.__send(socket, "PONG %s\n" %(m[1]))
                 continue
             if m[1] == "PRIVMSG" and m[2] == self.channel: 
                 self.__parse_m(m) 
