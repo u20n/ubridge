@@ -2,6 +2,8 @@ import json, requests, time, socket, threading
 
 class irc_: # channel
     users = {} 
+    __last_m = None
+
     def __send(self, socket, message):
         socket.send(bytes(message, "utf-8"))
 
@@ -17,8 +19,7 @@ class irc_: # channel
         m = " ".join(marray[3:])[1:-2] # remove the leading ':' and trailing '\r\n'
         if m != self.__last_m: 
             # log so we don't have a bunch of parrots 
-            self.__last_m = m
-            self.bridge.last(self.channel, m)
+            self.__last_m = m 
             self.bridge.push(self.channel, user, m)
 
     def __listen(self, user, socket):
@@ -64,8 +65,7 @@ class irc_: # channel
         self.ip = ip
         self.port = port
         self.channel = channel
-        self.bridge = bridge
-        self.__last_m = self.bridge.last(self.channel)
+        self.bridge = bridge 
 
 class discord_: # channel
     lm_id = None
@@ -86,7 +86,7 @@ class discord_: # channel
             # update last message
             if len(msg_array):
                 # discord does latest-first
-                self.lm_id = msg_array[0]["id"]
+                self.lm_id = self.bridge.last(self.channel_id, msg_array[0]["id"])
                 for msg in reversed(msg_array):
                     if "webhook_id" not in msg: # ignore our dummy accounts
                         self.bridge.push(self.channel_id, None, msg)
@@ -135,7 +135,8 @@ class discord_: # channel
     def __init__(self, token, channel_id, bridge):
         self.token = token
         self.channel_id = channel_id
-        self.bridge = bridge 
+        self.bridge = bridge
+        self.lm_id = self.bridge.last(self.channel_id)
         t = threading.Thread(target=self.__listen)
         t.start()
 
@@ -143,14 +144,11 @@ class bridge_: # 1:1 bridge:server
     c_map = {}
     def last(self, channel_id, new_id=None): # returns and takes an id
         j = json.load(open("last.log.json"))
-        if channel_id in j.keys(): 
-            if new_id:
-                new_f = new_f+str(channel_id+':'+new_id)
-        else:
+        if new_id:
             j[channel_id] = new_id
-        
+
         with open("last.log.json", 'w') as o:
-            o.write(j)
+            o.write(json.dumps(j, indent=4))
         return j[channel_id]
 
     def push(self, channel, name, msg): 
