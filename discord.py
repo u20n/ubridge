@@ -30,7 +30,7 @@ class discord_: # channel
                 for msg in reversed(msg_array): # discord does latest-first
                     if "webhook_id" not in msg: # ignore our dummy accounts
                         self.bridge.push(self.channel_id, None, msg)
-            time.sleep(2) # CONFIG: refresh
+            time.sleep(int(self.refresh)) # CONFIG: refresh
   
     def push(self, name, msg):
         # check if we have any webhooks for this user
@@ -74,6 +74,7 @@ class discord_: # channel
         self.token = token
         self.channel_id = channel_id
         self.bridge = bridge
+        self.refresh = bridge.refresh
         self.lm_id = self.bridge.last(self.channel_id)
         t = threading.Thread(target=self.__listen)
         t.start()

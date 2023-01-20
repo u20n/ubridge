@@ -1,6 +1,6 @@
 {
   "server": "127.0.0.1",
-  "port": "6679",
+  "port": 6679,
   "token": "abcd.efg.hijk", 
   "channels": 
   {
