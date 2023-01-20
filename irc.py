@@ -53,7 +53,10 @@ class irc_: # channel
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         s.connect((self.ip, self.port))
         self.__send(s, ("NICK %s\n" % name))
-        self.__send(s, ("USER %s 0 * :%s\n" % (name, name))) 
+        self.__send(s, ("USER %s 0 * :%s\n" % (name, name)))
+        if name != "ubridge":
+            #self.__send(s, ("MODE %s +%s\n" % (name, 'd'))) # deafen channel messages
+            pass
         self.__send(s, ("JOIN %s\n" % self.channel))  
         # start listening
         t = threading.Thread(target=self.__listen, args=(name, s))
