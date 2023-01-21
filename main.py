@@ -20,17 +20,13 @@ class bridge_: # 1:1 bridge:server
     def load(self, channel_map):
         for [i, d] in channel_map:
             # spawn new irc_ and discord_ instances 
-            self.c_map[i] = discord.discord_(self.token, d, self)
-            self.c_map[d] = irc.irc_(self.ip, self.port, i, self)
+            self.c_map[i] = discord.discord_(self.cfg["token"], d, self)
+            self.c_map[d] = irc.irc_(self.cfg["server"], self.cfg["port"], i, self)
             print("(irc)", i, "<--> (discord)", d) 
 
     def __init__(self, cfg):
-        self.ip = cfg["server"]
-        self.port = cfg["port"]
-        self.token = cfg["token"]
-        self.refresh = cfg["refresh"]
-        self.pword = cfg["pword"]
-
+        self.cfg = cfg
+        
 def config():
     cfg = json.load(open("config.json")) 
     b = bridge_(cfg) # create bridge

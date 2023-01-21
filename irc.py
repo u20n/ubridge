@@ -52,8 +52,8 @@ class irc_: # channel
     def create_user(self, name):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         s.connect((self.ip, self.port))
-        if self.bridge.pword:
-            self.__send(s, ("PASS %s\n" % self.bridge.pword))
+        if self.bridge.cfg["pword"]:
+            self.__send(s, ("PASS %s\n" % self.bridge.cfg["pword"]))
         self.__send(s, ("NICK %s\n" % name))
         self.__send(s, ("USER %s 0 * :%s\n" % (name, name)))
         if name != "ubridge":

@@ -74,7 +74,7 @@ class discord_: # channel
         self.token = token
         self.channel_id = channel_id
         self.bridge = bridge
-        self.refresh = bridge.refresh
+        self.refresh = bridge.cfg["refresh"]
         self.lm_id = self.bridge.last(self.channel_id)
         t = threading.Thread(target=self.__listen)
         t.start()
