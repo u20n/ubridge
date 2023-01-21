@@ -1,7 +1,9 @@
 {
   "server": "127.0.0.1",
   "port": 6679,
-  "token": "abcd.efg.hijk", 
+  "token": "abcd.efg.hijk",
+  "refresh": 20,
+  "pword": "password",
   "channels": 
   {
     "#test": "123456789"
